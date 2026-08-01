@@ -15,3 +15,5 @@ dist/
 # Documentos internos
 ROADMAP.md
 *.exe
+*.bin
+*.zip
