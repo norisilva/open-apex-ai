@@ -13,7 +13,7 @@ Currently, only the latest release of OpenApex AI is supported with security upd
 
 If you discover a security vulnerability within OpenApex AI, please do not disclose it publicly.
 
-Instead, please send an email to the repository owner or open a private security advisory through GitHub.
+Instead, please send an email to INCLUSAODEV@GMAIL.COM or open a private security advisory through GitHub.
 We will try to acknowledge your report within 48 hours and provide a timeline for a fix.
 
 Please include:
