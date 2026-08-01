@@ -15,6 +15,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 ORIGINAL_SETUPS_FILE = os.path.join(DATA_DIR, "setups_originais.json")
 ACCESSIBILITY_SETUPS_FILE = os.path.join(DATA_DIR, "setups_acessibilidade.json")
+RULES_FILE = os.path.join(DATA_DIR, "rules.json")
 
 # Create data directory if it doesn't exist
 os.makedirs(DATA_DIR, exist_ok=True)

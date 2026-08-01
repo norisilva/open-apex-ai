@@ -4,6 +4,19 @@ from tkinter import scrolledtext
 import threading
 import json
 import os
+import logging
+import traceback
+
+# Configura logs
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.FileHandler("app.log", encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 import config
 from scraper.dual_scraper import DualScraper
@@ -341,15 +354,20 @@ class ControlPanel(tk.Tk):
             self.btn_back_outer.config(bg=GRAY)
 
     def open_settings(self):
-        SettingsWindow(self)
+        logger.info("Abrindo janela de configuracao de perfis...")
+        try:
+            SettingsWindow(self)
+        except Exception as e:
+            logger.error(f"Erro ao abrir SettingsWindow: {e}\n{traceback.format_exc()}")
+            CyberDialog(self, "ERRO", f"Falha ao abrir configuracoes:\n{e}", error=True)
 
     def run_overlay(self):
         try:
             from overlay.overlay_ui import OverlayApp
-            self.iconify()
+            self.withdraw()  # Esconde a janela principal em vez de iconificar
             app = OverlayApp()
             app.run()
-            self.deiconify()
+            self.deiconify() # Traz de volta quando o HUD for fechado
         except ImportError as e:
             CyberDialog(self, "ERRO", f"Erro ao iniciar o HUD:\n{e}", error=True)
 
@@ -361,14 +379,16 @@ class CyberDialog(tk.Toplevel):
         self.overrideredirect(True)
         color = MAGENTA if error else CYAN
         self.configure(bg=color)
-        self.geometry("360x180")
         self.transient(parent)
-        self.grab_set()
 
         # Centraliza relativo ao parent
-        px = parent.winfo_x() + (parent.winfo_width() // 2) - 180
-        py = parent.winfo_y() + (parent.winfo_height() // 2) - 90
-        self.geometry(f"+{px}+{py}")
+        px = max(0, parent.winfo_x() + (parent.winfo_width() // 2) - 180)
+        py = max(0, parent.winfo_y() + (parent.winfo_height() // 2) - 90)
+        self.geometry(f"360x180+{px}+{py}")
+        
+        self.update_idletasks()
+        self.attributes('-topmost', True)
+        self.grab_set()
 
         inner = tk.Frame(self, bg=BG_PANEL, padx=20, pady=16)
         inner.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
@@ -384,16 +404,28 @@ class CyberDialog(tk.Toplevel):
 class SettingsWindow(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
+        logger.debug("Inicializando SettingsWindow...")
         self.overrideredirect(True)
         self.configure(bg=MAGENTA)
-        self.geometry("400x480")
         self.transient(parent)
-        self.grab_set()
+        
+        px = max(0, parent.winfo_x() + (parent.winfo_width() // 2) - 200)
+        py = max(0, parent.winfo_y() + (parent.winfo_height() // 2) - 240)
+        self.geometry(f"400x480+{px}+{py}")
 
-        px = parent.winfo_x() + (parent.winfo_width() // 2) - 200
-        py = parent.winfo_y() + (parent.winfo_height() // 2) - 240
-        self.geometry(f"+{px}+{py}")
+        # Evita travar a interface se der erro no init
+        try:
+            self._build_ui(parent)
+            self.update_idletasks()
+            self.attributes('-topmost', True)
+            self.grab_set()
+            logger.debug("SettingsWindow inicializada com sucesso.")
+        except Exception as e:
+            logger.error(f"Erro ao construir SettingsWindow: {e}\n{traceback.format_exc()}")
+            self.destroy()
+            raise e
 
+    def _build_ui(self, parent):
         inner = tk.Frame(self, bg=BG_PANEL)
         inner.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
 
@@ -487,6 +519,7 @@ class SettingsWindow(tk.Toplevel):
             highlightthickness=0, bd=0,
             sliderlength=18, showvalue=True,
             font=(FONT_MONO, 7),
+            resolution=0.01 if isinstance(variable, tk.DoubleVar) else 1
         )
         s.pack(fill=tk.X)
         s.bind("<ButtonRelease-1>", lambda e: self.mode_var.set("Personalizado"))
