@@ -47,9 +47,13 @@ class ConfigManager:
     def get_brake_offset(self):
         return self.rules_data.get("brakes", {}).get("brake_pressure", {}).get("offset", -5)
 
-    def save(self, mode, susp, diff, brake, language="pt_br"):
+    def get_tyre_hotkey(self):
+        return self.rules_data.get("tyre_hotkey", "f8")
+
+    def save(self, mode, susp, diff, brake, language="pt_br", tyre_hotkey="f8"):
         self.rules_data["mode"] = mode
         self.rules_data["language"] = language
+        self.rules_data["tyre_hotkey"] = tyre_hotkey
 
         if "suspension" not in self.rules_data:
             self.rules_data["suspension"] = {}

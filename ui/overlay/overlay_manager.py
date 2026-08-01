@@ -1,9 +1,10 @@
-﻿import os, sys, tkinter as tk, keyboard
+import os, sys, tkinter as tk, keyboard
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from core.telemetry.listener import TelemetryListener
 from ui.overlay.overlay_ui import OverlayApp
 from ui.overlay.overlay_tyre import TyreOverlayApp
+from core.config_manager import ConfigManager
 
 class HUDManager:
     def __init__(self, parent=None):
@@ -35,8 +36,9 @@ class HUDManager:
         
         try:
             keyboard.unhook_all()
-            keyboard.on_press_key("f8", lambda e: self.root.after(0, self.tyre_hud.toggle_visibility))
-        except Exception as e: print("Erro atalho F8:", e)
+            hotkey = ConfigManager().get_tyre_hotkey()
+            keyboard.on_press_key(hotkey, lambda e: self.root.after(0, self.tyre_hud.toggle_visibility))
+        except Exception as e: print(f"Erro atalho {hotkey}:", e)
             
     def show_tyre_hud(self, auto_hide_ms=None):
         if not self.tyre_hud.is_visible: self.tyre_hud.toggle_visibility()

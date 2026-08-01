@@ -10,8 +10,8 @@ class WindowState:
 
 class WindowManager:
     """
-    Segregation Principle: Isola a logica de controle de estado, visibilidade, 
-    hotkeys e foco da janela principal.
+    Segregation Principle: Isolates the logic of state control, visibility,
+    hotkeys and focus of the main window.
     """
     def __init__(self, root, hotkey='f4'):
         self.root = root
@@ -20,33 +20,33 @@ class WindowManager:
         self.retract_timer = None
         self.hotkey = hotkey
 
-        # Registrar eventos
+        # Register events
         self.root.bind("<FocusOut>", self._on_focus_out)
         
         try:
             keyboard.add_hotkey(self.hotkey, self._trigger_hotkey)
         except Exception as e:
-            print(f"Aviso: Erro ao registrar hotkey global: {e}")
+            print(f"Warning: Error registering global hotkey: {e}")
 
     def _trigger_hotkey(self):
-        logging.debug("[WindowManager] _trigger_hotkey chamado")
-        # A API do keyboard chama callbacks em background thread.
-        # O after(0) injeta de volta na thread segura do tkinter
+        logging.debug("[WindowManager] _trigger_hotkey called")
+        # The keyboard API calls callbacks in a background thread.
+        # after(0) injects back into the tkinter thread
         self.root.after(0, self.toggle)
 
     def toggle(self):
-        """Alterna estritamente entre os estados expandido e oculto."""
-        logging.debug(f"[WindowManager] toggle chamado. Estado atual: {self.state}")
+        """Strictly alternates between expanded and hidden states."""
+        logging.debug(f"[WindowManager] toggle called. Current state: {self.state}")
         if self.state == WindowState.HIDDEN:
             self.expand()
         else:
             self.retract()
 
     def expand(self):
-        """Expande a janela, define topmost e forca o foco."""
-        logging.debug(f"[WindowManager] expand chamado. Estado era: {self.state}")
+        """Expands the window, sets topmost and forces focus."""
+        logging.debug(f"[WindowManager] expand called. State was: {self.state}")
         if self.state == WindowState.EXPANDED:
-            logging.debug("[WindowManager] expand ignorado: ja esta expandido")
+            logging.debug("[WindowManager] expand ignored: already expanded")
             return
             
         self.state = WindowState.EXPANDED
@@ -60,20 +60,20 @@ class WindowManager:
             self.retract_timer = None
             
         self.root.deiconify()
-        # Garante que vai aparecer em cima do F1 (fundamental)
+        # Ensures it will appear on top of F1 (fundamental)
         self.root.attributes("-topmost", True)
         self.root.focus_force()
         
-        # Ignora eventos FocusOut espurios vindos do SO pela destruicao do edge trigger
+        # Ignores spurious FocusOut events from OS due to edge trigger destruction
         self._ignore_focus = True
         self.root.after(500, lambda: setattr(self, '_ignore_focus', False))
-        logging.debug("[WindowManager] Janela expandida com sucesso.")
+        logging.debug("[WindowManager] Window expanded successfully.")
 
     def retract(self):
-        """Oculta a janela principal e ativa o trigger flutuante."""
-        logging.debug(f"[WindowManager] retract chamado. Estado era: {self.state}")
+        """Hides the main window and activates the floating trigger."""
+        logging.debug(f"[WindowManager] retract called. State was: {self.state}")
         if self.state == WindowState.HIDDEN:
-            logging.debug("[WindowManager] retract ignorado: ja esta oculto")
+            logging.debug("[WindowManager] retract ignored: already hidden")
             return
             
         self.state = WindowState.HIDDEN
@@ -83,35 +83,35 @@ class WindowManager:
         
         if self.edge_trigger is None or not self.edge_trigger.winfo_exists():
             self.edge_trigger = EdgeTrigger(self._trigger_hotkey)
-        logging.debug("[WindowManager] Janela retraida com sucesso.")
+        logging.debug("[WindowManager] Window retracted successfully.")
 
     def _on_focus_out(self, event):
-        """Controla a perda de foco."""
+        """Handles focus loss."""
         if getattr(self, '_ignore_focus', False):
-            logging.debug(f"[WindowManager] FocusOut ignorado pelo _ignore_focus escudo em: {event.widget}")
+            logging.debug(f"[WindowManager] FocusOut ignored by _ignore_focus shield on: {event.widget}")
             return
             
-        # Se a propria janela perder foco, checamos para recolher.
+        # If the window itself loses focus, we check to retract.
         if event.widget == self.root and self.state == WindowState.EXPANDED:
-            logging.debug("[WindowManager] FocusOut na root recebido, agendando retract...")
-            # Debounce timer para evitar glitchs de perda de foco do OS
+            logging.debug("[WindowManager] FocusOut on root received, scheduling retract...")
+            # Debounce timer to avoid OS focus loss glitches
             if self.retract_timer:
                 self.root.after_cancel(self.retract_timer)
             self.retract_timer = self.root.after(200, self._do_retract_if_unfocused)
 
     def _do_retract_if_unfocused(self):
-        """Se apos 200ms a janela continuar sem foco do OS, recolhemos."""
-        logging.debug("[WindowManager] Executando validacao do _do_retract_if_unfocused")
+        """If after 200ms the window remains without OS focus, we retract."""
+        logging.debug("[WindowManager] Executing validation of _do_retract_if_unfocused")
         if self.state == WindowState.EXPANDED:
-            # Se for None, significa que nenhum componente da nossa interface tem o foco
+            # If None, it means no component of our interface has focus
             focus_val = self.root.focus_displayof()
-            logging.debug(f"[WindowManager] Foco atual e: {focus_val}")
+            logging.debug(f"[WindowManager] Current focus is: {focus_val}")
             if focus_val is None:
-                logging.debug("[WindowManager] Foco perdido confirmado. Executando retract.")
+                logging.debug("[WindowManager] Focus lost confirmed. Executing retract.")
                 self.retract()
             
     def destroy(self):
-        """Limpa as hotkeys globais ao fechar o app."""
+        """Clears global hotkeys when closing the app."""
         try:
             keyboard.unhook_all_hotkeys()
         except:

@@ -1,6 +1,7 @@
 import os
 import shutil
 import xml.etree.ElementTree as ET
+from core.i18n.translator import _
 
 class GameConfigurator:
     def __init__(self):
@@ -13,7 +14,7 @@ class GameConfigurator:
         Retorna dicionario com resultado.
         """
         if not os.path.exists(self.my_games_dir):
-            return {"success": False, "msg": "Pasta 'My Games' nao encontrada."}
+            return {"success": False, "msg": _("msg_my_games_not_found")}
 
         games_found = []
         games_configured = []
@@ -24,10 +25,10 @@ class GameConfigurator:
                 if folder_name.startswith("F1 ") and folder_name[3:].isdigit():
                     games_found.append(folder_name)
         except Exception as e:
-            return {"success": False, "msg": f"Erro ao acessar My Games: {str(e)}"}
+            return {"success": False, "msg": _("msg_error_my_games", error=str(e))}
             
         if not games_found:
-            return {"success": False, "msg": "Nenhum jogo da franquia F1 encontrado."}
+            return {"success": False, "msg": _("msg_no_f1_games")}
 
         for game in games_found:
             config_path = os.path.join(self.my_games_dir, game, 'hardwaresettings', 'hardware_settings_config.xml')
@@ -42,11 +43,11 @@ class GameConfigurator:
                     print(f"Erro ao configurar {game}: {e}")
 
         if games_configured:
-            return {"success": True, "msg": f"Configurado com sucesso: {', '.join(games_configured)}"}
+            return {"success": True, "msg": _("msg_config_success", games=', '.join(games_configured))}
         elif already_configured > 0:
-            return {"success": True, "msg": "Os jogos encontrados ja estavam configurados corretamente!"}
+            return {"success": True, "msg": _("msg_already_configured")}
         else:
-            return {"success": False, "msg": "Nenhum arquivo de configuracao foi encontrado."}
+            return {"success": False, "msg": _("msg_no_config_found")}
 
     def _configure_file(self, file_path, game_name):
         """Modifica o XML dinamicamente."""

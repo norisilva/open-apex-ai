@@ -40,6 +40,8 @@ class TyrePredictor:
     def get_predictions(self):
         """Returns predictions based on the worst performing tyre."""
         if sum(self.wear_per_lap) <= 0.01:
+            if self.current_lap != -1:
+                return {"is_calibrating": True}
             return None # Not enough data
             
         worst_current = max(self.current_wear)
@@ -47,6 +49,8 @@ class TyrePredictor:
         worst_rate = self.wear_per_lap[worst_index]
         
         if worst_rate <= 0:
+            if self.current_lap != -1:
+                return {"is_calibrating": True}
             return None
             
         next_lap = worst_current + worst_rate
@@ -68,6 +72,7 @@ class TyrePredictor:
             pit_str = "BOX AGORA!"
             
         return {
+            "is_calibrating": False,
             "current": self.current_wear,
             "next_lap": next_lap,
             "in_5_laps": in_5,

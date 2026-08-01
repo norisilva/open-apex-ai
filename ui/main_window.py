@@ -28,7 +28,7 @@ class ControlPanel(tk.Tk):
         inner = tk.Frame(outer, bg=BG_DEEP, padx=1, pady=1)
         inner.pack(fill=tk.BOTH, expand=True)
 
-        self.title_bar = CyberTitleBar(inner, title="F1 SETUPS ASSIST // v2.0", on_close=self.destroy, on_minimize=self.iconify)
+        self.title_bar = CyberTitleBar(inner, title="OPENAPEX AI // v2.0", on_close=self.destroy, on_minimize=self.iconify)
         self.title_bar.pack(fill=tk.X)
 
         self.main_panel = tk.Frame(inner, bg=BG_PANEL)
@@ -94,7 +94,7 @@ class ControlPanel(tk.Tk):
 
     def run_smart_hud(self):
         try:
-            from overlay.overlay_manager import HUDManager
+            from ui.overlay.overlay_manager import HUDManager
             self.withdraw()
             app = HUDManager(parent=self)
             app.run()
@@ -105,7 +105,7 @@ class ControlPanel(tk.Tk):
 
     def run_auto_config(self):
         try:
-            from telemetry.game_config import GameConfigurator
+            from core.telemetry.game_config import GameConfigurator
             configurator = GameConfigurator()
             result = configurator.configure_all_games()
             if result.get("success"):
