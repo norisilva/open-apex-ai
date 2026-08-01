@@ -1,6 +1,6 @@
-import struct
+﻿import struct
 import ctypes
-from telemetry.packets import *
+from core.telemetry.packets import *
 
 class TelemetryParser:
     @staticmethod

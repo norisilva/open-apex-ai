@@ -8,7 +8,8 @@ from ui.theme import *
 from ui.widgets import neon_button
 from ui.dialogs import CyberDialog
 from core.config_manager import ConfigManager
-from transformer.accessibility_engine import AccessibilityTransformer
+from core.transformer.accessibility_engine import AccessibilityTransformer
+from core.i18n.translator import _
 
 class SettingsWindow(tk.Toplevel):
     def __init__(self, parent):
@@ -41,8 +42,8 @@ class SettingsWindow(tk.Toplevel):
         tk.Frame(title_bar, bg=MAGENTA, height=2).pack(fill=tk.X, side=tk.TOP)
         title_content = tk.Frame(title_bar, bg=BG_DEEP)
         title_content.pack(fill=tk.BOTH, expand=True)
-        tk.Label(title_content, text="◈ CONFIGURAR PERFIL", bg=BG_DEEP, fg=MAGENTA, font=(FONT_MONO, 9, "bold")).pack(side=tk.LEFT, padx=10)
-        close_btn = tk.Label(title_content, text="✕", bg=BG_DEEP, fg=GRAY, font=(FONT_MONO, 11), cursor="hand2", padx=10)
+        tk.Label(title_content, text=_("config_profile"), bg=BG_DEEP, fg=MAGENTA, font=(FONT_MONO, 9, "bold")).pack(side=tk.LEFT, padx=10)
+        close_btn = tk.Label(title_content, text="âœ•", bg=BG_DEEP, fg=GRAY, font=(FONT_MONO, 11), cursor="hand2", padx=10)
         close_btn.pack(side=tk.RIGHT)
         close_btn.bind("<Enter>", lambda e: close_btn.config(fg=MAGENTA))
         close_btn.bind("<Leave>", lambda e: close_btn.config(fg=GRAY))
@@ -59,7 +60,7 @@ class SettingsWindow(tk.Toplevel):
         self.config_mgr = ConfigManager()
         self.current_mode = self.config_mgr.get_mode()
 
-        tk.Label(content, text="MODO DE CONDUCAO", bg=BG_PANEL, fg=MAGENTA, font=(FONT_MONO, 8, "bold")).pack(anchor="w", pady=(0, 4))
+        tk.Label(content, text=_("driving_mode"), bg=BG_PANEL, fg=MAGENTA, font=(FONT_MONO, 8, "bold")).pack(anchor="w", pady=(0, 4))
         self.mode_var = tk.StringVar(value=self.current_mode)
         self.modes = ["Esports (Original)", "Gamepad (Estavel)", "Acessibilidade (Max Estabilidade)", "Personalizado"]
 
@@ -82,10 +83,10 @@ class SettingsWindow(tk.Toplevel):
         btn_row = tk.Frame(content, bg=BG_PANEL)
         btn_row.pack(fill=tk.X)
 
-        btn_cancel, _ = neon_button(btn_row, "CANCELAR", self.destroy, color=GRAY)
+        btn_cancel, _btn1 = neon_button(btn_row, _("btn_cancel"), self.destroy, color=GRAY)
         btn_cancel.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0, 4))
 
-        btn_save, _ = neon_button(btn_row, "SALVAR ► APLICAR", self.save_and_apply, color=MAGENTA)
+        btn_save, _btn2 = neon_button(btn_row, _("btn_save_close"), self.save_and_apply, color=MAGENTA)
         btn_save.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(4, 0))
 
     def _make_slider(self, parent, label, variable, from_, to_):

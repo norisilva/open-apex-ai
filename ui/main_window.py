@@ -10,8 +10,8 @@ from ui.dialogs import CyberDialog
 from ui.menu_frame import MenuFrame
 from ui.console_frame import ConsoleFrame, ConsoleRedirector
 from ui.settings_window import SettingsWindow
-from scraper.dual_scraper import DualScraper
-from transformer.accessibility_engine import AccessibilityTransformer
+from core.scraper.dual_scraper import DualScraper
+from core.transformer.accessibility_engine import AccessibilityTransformer
 from ui.window_manager import WindowManager
 
 class ControlPanel(tk.Tk):

@@ -23,6 +23,9 @@ class ConfigManager:
         else:
             self.rules_data = {}
 
+    def get_language(self):
+        return self.rules_data.get("language", "pt_br")
+
     def get_mode(self):
         return self.rules_data.get("mode", "Acessibilidade (Max Estabilidade)")
 
@@ -35,8 +38,9 @@ class ConfigManager:
     def get_brake_offset(self):
         return self.rules_data.get("brakes", {}).get("brake_pressure", {}).get("offset", -5)
 
-    def save(self, mode, susp, diff, brake):
+    def save(self, mode, susp, diff, brake, language="pt_br"):
         self.rules_data["mode"] = mode
+        self.rules_data["language"] = language
 
         if "suspension" not in self.rules_data:
             self.rules_data["suspension"] = {}

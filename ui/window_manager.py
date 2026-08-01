@@ -1,5 +1,8 @@
 import keyboard
+import logging
 from ui.edge_trigger import EdgeTrigger
+
+logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class WindowState:
     EXPANDED = "EXPANDED"
@@ -26,12 +29,14 @@ class WindowManager:
             print(f"Aviso: Erro ao registrar hotkey global: {e}")
 
     def _trigger_hotkey(self):
+        logging.debug("[WindowManager] _trigger_hotkey chamado")
         # A API do keyboard chama callbacks em background thread.
         # O after(0) injeta de volta na thread segura do tkinter
         self.root.after(0, self.toggle)
 
     def toggle(self):
         """Alterna estritamente entre os estados expandido e oculto."""
+        logging.debug(f"[WindowManager] toggle chamado. Estado atual: {self.state}")
         if self.state == WindowState.HIDDEN:
             self.expand()
         else:
@@ -39,7 +44,9 @@ class WindowManager:
 
     def expand(self):
         """Expande a janela, define topmost e forca o foco."""
+        logging.debug(f"[WindowManager] expand chamado. Estado era: {self.state}")
         if self.state == WindowState.EXPANDED:
+            logging.debug("[WindowManager] expand ignorado: ja esta expandido")
             return
             
         self.state = WindowState.EXPANDED
@@ -60,10 +67,13 @@ class WindowManager:
         # Ignora eventos FocusOut espurios vindos do SO pela destruicao do edge trigger
         self._ignore_focus = True
         self.root.after(500, lambda: setattr(self, '_ignore_focus', False))
+        logging.debug("[WindowManager] Janela expandida com sucesso.")
 
     def retract(self):
         """Oculta a janela principal e ativa o trigger flutuante."""
+        logging.debug(f"[WindowManager] retract chamado. Estado era: {self.state}")
         if self.state == WindowState.HIDDEN:
+            logging.debug("[WindowManager] retract ignorado: ja esta oculto")
             return
             
         self.state = WindowState.HIDDEN
@@ -73,14 +83,17 @@ class WindowManager:
         
         if self.edge_trigger is None or not self.edge_trigger.winfo_exists():
             self.edge_trigger = EdgeTrigger(self._trigger_hotkey)
+        logging.debug("[WindowManager] Janela retraida com sucesso.")
 
     def _on_focus_out(self, event):
         """Controla a perda de foco."""
         if getattr(self, '_ignore_focus', False):
+            logging.debug(f"[WindowManager] FocusOut ignorado pelo _ignore_focus escudo em: {event.widget}")
             return
             
         # Se a propria janela perder foco, checamos para recolher.
         if event.widget == self.root and self.state == WindowState.EXPANDED:
+            logging.debug("[WindowManager] FocusOut na root recebido, agendando retract...")
             # Debounce timer para evitar glitchs de perda de foco do OS
             if self.retract_timer:
                 self.root.after_cancel(self.retract_timer)
@@ -88,9 +101,13 @@ class WindowManager:
 
     def _do_retract_if_unfocused(self):
         """Se apos 200ms a janela continuar sem foco do OS, recolhemos."""
+        logging.debug("[WindowManager] Executando validacao do _do_retract_if_unfocused")
         if self.state == WindowState.EXPANDED:
             # Se for None, significa que nenhum componente da nossa interface tem o foco
-            if self.root.focus_displayof() is None:
+            focus_val = self.root.focus_displayof()
+            logging.debug(f"[WindowManager] Foco atual e: {focus_val}")
+            if focus_val is None:
+                logging.debug("[WindowManager] Foco perdido confirmado. Executando retract.")
                 self.retract()
             
     def destroy(self):

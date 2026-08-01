@@ -1,8 +1,8 @@
-import json, os, sys
+﻿import json, os, sys
 from playwright.sync_api import sync_playwright
 import config
-from scraper.track_catalog import TRACKS
-from scraper.html_parser import scrape_f1laps_setup_detail
+from core.scraper.track_catalog import TRACKS
+from core.scraper.html_parser import scrape_f1laps_setup_detail
 
 class F1LapsScraper:
     def __init__(self):

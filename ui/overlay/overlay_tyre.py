@@ -1,10 +1,10 @@
-import os, sys, tkinter as tk, keyboard
+﻿import os, sys, tkinter as tk, keyboard
 from tkinter import ttk
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-from telemetry.listener import TelemetryListener
-from overlay.tyre_predictor import TyrePredictor
-from overlay.theme import setup_overlay_style, setup_window_properties
+from core.telemetry.listener import TelemetryListener
+from ui.overlay.tyre_predictor import TyrePredictor
+from ui.overlay.theme import setup_overlay_style, setup_window_properties
 
 class TyreOverlayApp:
     def __init__(self, parent=None, managed=False):

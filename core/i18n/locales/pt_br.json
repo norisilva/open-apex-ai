@@ -1,0 +1,20 @@
+{
+    "app_title": "F1  SETUPS  ASSIST",
+    "app_subtitle": "◄ UNIVERSAL SETUP SYSTEM ►",
+    "status_ready": "PRONTO",
+    "btn_settings": "CONFIGURACOES",
+    "btn_auto_config": "AUTO-CONFIGURAR JOGO",
+    "btn_auto_setup": "OBTER SETUPS AUTOMATICOS",
+    "btn_smart_hud": "SMART HUD [F8]",
+    "warning_f1laps": "! Ao rodar o HUD, feche o F1Laps App",
+    "btn_back_menu": "VOLTAR PARA O MENU",
+    "btn_exit": "SAIR DO APLICATIVO",
+    "dialog_warning": "AVISO",
+    "dialog_error": "ERRO",
+    "dialog_success": "SUCESSO",
+    "config_profile": "◈ CONFIGURAR PERFIL",
+    "driving_mode": "MODO DE CONDUCAO",
+    "btn_save_close": "SALVAR E FECHAR",
+    "btn_cancel": "CANCELAR",
+    "bot_running": "◈ ROBO EM EXECUCAO"
+}

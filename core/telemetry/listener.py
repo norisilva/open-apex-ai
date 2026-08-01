@@ -1,6 +1,6 @@
-import socket
+﻿import socket
 import threading
-from telemetry.parser import TelemetryParser
+from core.telemetry.parser import TelemetryParser
 
 class TelemetryListener(threading.Thread):
     def __init__(self, port, callback, status_callback=None, speed_callback=None, lap_callback=None, wear_callback=None, distance_callback=None):

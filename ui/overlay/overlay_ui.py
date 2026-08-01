@@ -1,10 +1,10 @@
-import os, sys, json, tkinter as tk
+﻿import os, sys, json, tkinter as tk
 from tkinter import ttk
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-from scraper.track_catalog import TRACKS
-from telemetry.listener import TelemetryListener
-from overlay.theme import setup_overlay_style, setup_window_properties
+from core.scraper.track_catalog import TRACKS
+from core.telemetry.listener import TelemetryListener
+from ui.overlay.theme import setup_overlay_style, setup_window_properties
 
 class OverlayApp:
     def __init__(self, parent=None, managed=False):
