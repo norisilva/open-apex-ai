@@ -1,10 +1,10 @@
-import os
+﻿import os
 import json
 from playwright.sync_api import sync_playwright
 
-from scraper.f1laps_scraper import F1LapsScraper
-from scraper.srs_scraper import SRSScraper
-from scraper.track_catalog import TRACKS
+from core.scraper.f1laps_scraper import F1LapsScraper
+from core.scraper.srs_scraper import SRSScraper
+from core.scraper.track_catalog import TRACKS
 
 class DualScraper:
     def __init__(self):

@@ -1,52 +1,48 @@
-# F1 Setups Assist - Assistente Universal de Setups
+# OpenApex AI
 
-*[Read in English / Ler em Inglês (README.md)](README.md)*
+**Engenheiro de Corrida com IA e Hub de Telemetria Open-Source para Simuladores de F1**
 
-Aplicativo local para **F1 25** projetado como um Assistente Universal de Setups. O sistema extrai automaticamente os melhores setups competitivos online e permite que o jogador aplique **Perfis de Conducao** (Esports, Gamepad ou Acessibilidade para Distonia Focal). Ele também exibe um HUD flutuante no jogo que le sua telemetria para saber em qual pista você está.
+O OpenApex AI (anteriormente F1 Setups Assist) é uma ferramenta moderna e de código aberto projetada para sim racers que querem elevar sua gameplay. Ele fornece previsões inteligentes de desgaste de pneus, overlays de setups ao vivo e ajustes de acessibilidade orientados por telemetria para F1 24 e F1 25.
 
-## 📦 Como Usar (Para Jogadores)
+## 🚀 Funcionalidades
 
-**A maneira mais fácil de usar o F1 Setups Assist é baixando o Executável:**
+- **HUD Inteligente de Pneus (IA):** Rastreamento de degradação de pneu em tempo real com previsões matemáticas de desgaste para estimar a janela ideal de pit stops.
+- **Overlay de Setups ao Vivo:** Detecta automaticamente a pista atual e exibe seu setup predefinido diretamente na tela como um HUD transparente.
+- **Zero Roubo de Foco:** Manipulação avançada de geometria de interface (OS) garante que os overlays apareçam sem nunca roubar o foco ou minimizar o seu jogo.
+- **Transformador de Acessibilidade:** Ajusta os arquivos de configuração de hardware do jogo dinamicamente (XML) para fornecer estabilidade máxima para jogadores de controle/gamepad.
+- **Multilíngue (i18n):** Suporte nativo para Português, Inglês, Espanhol, Alemão, Hindi e Árabe.
+- **Hotkeys Customizáveis:** Mapeie facilmente os controles do HUD para o seu volante ou pedais usando o gerenciador de hotkeys embutido.
 
-1. Vá na aba **[Releases](https://github.com/norisilva/f1-setups-assist/releases)** deste repositório.
-2. Baixe o arquivo `F1SetupsAssist.exe`.
-3. Coloque em sua área de trabalho e dê um duplo clique nele.
-4. Uma Janela de Controle aparecerá!
+## 📥 Instalação
 
-### Usando o Painel de Controle
-- **Baixar Setups:** Clique no primeiro botão para que o sistema baixe os setups mais recentes da nuvem (Usa F1Laps, com fallback para SimRacingSetup caso seja bloqueado pelo Cloudflare).
-- **Configurar Perfil de Condução:** Clique na Engrenagem para escolher o seu modo. Você pode usar os setups "Esports" crus, suavizá-los para quem joga no "Gamepad", ou usar o modo máximo de "Acessibilidade" se você tiver dificuldades motoras (como Distonia Focal).
-- **HUD no Jogo:** Clique em Iniciar HUD. Uma telinha transparente vai aparecer sobre o seu jogo!
+**A maneira mais fácil de usar o OpenApex AI é baixando o Executável:**
+1. Acesse a página de [Releases](https://github.com/norisilva/open-apex-ai/releases).
+2. Baixe o arquivo `OpenApexAI.exe` mais recente.
+3. Coloque em uma pasta de sua escolha e execute-o.
 
-## 🏎️ Configuracao no F1 25
+*Nota: Você pode precisar autorizar o aplicativo no Windows Defender, já que o `.exe` é gerado via PyInstaller sem um certificado digital empresarial.*
 
-Para que o Overlay identifique em qual pista você está correndo, a telemetria do jogo precisa estar ativa:
-1. Abra o F1 25
-2. Vá em **Settings** > **Telemetry Settings**
-3. **UDP Telemetry**: On
-4. **UDP Port**: `20777`
-5. **UDP Send Rate**: 10Hz a 20Hz é suficiente (para não sobrecarregar a rede)
-6. **UDP Format**: `2025`
+## 🔧 Rodando a partir do Código-Fonte
 
-> [!CAUTION]
-> **Cuidado com outros softwares de telemetria!**
-> Se você possui o aplicativo oficial do F1Laps instalado no seu computador, **ele precisa estar fechado** antes de abrir o nosso HUD. O aplicativo F1Laps original monopoliza a porta 20777 do Windows, impedindo que os dados cheguem até o nosso Assistente.
+Se você prefere rodar o código Python diretamente:
 
-## 💻 Para Desenvolvedores (Como compilar)
+1. Clone o repositório:
+   ```cmd
+   git clone https://github.com/norisilva/open-apex-ai.git
+   ```
+2. Instale as dependências:
+   ```cmd
+   pip install -r requirements.txt
+   ```
+3. Execute o aplicativo:
+   ```cmd
+   python main.py
+   ```
 
-Se você quer modificar o código e rodar a partir do Python:
+## 🤝 Como Contribuir
 
-1. Clone o repositório
-2. Instale as dependências: 
-```bash
-pip install -r requirements.txt
-playwright install chromium
-```
-3. Execute `python main.py` para abrir o painel.
-4. Para compilar você mesmo o arquivo executável final, dê um duplo clique no `build.bat`! (O script usará o PyInstaller para empacotar a aplicação).
+Contribuições são bem-vindas! Se você tiver ideias para novos módulos de IA/telemetria, suporte a novos jogos ou melhorias de interface, fique à vontade para abrir uma issue ou enviar um Pull Request.
 
-## Estrutura do Projeto
-* `scraper/`: Scripts do Playwright responsáveis por navegar, driblar anti-bots e extrair setups.
-* `transformer/`: O "cérebro" das regras de acessibilidade e suavização matemática.
-* `overlay/`: Servidor UDP e Janela Always-on-top em Tkinter.
-* `data/`: Onde os arquivos JSON resultantes e as suas regras pessoais (`rules.json`) ficam salvos.
+## 📄 Licença
+
+Este projeto é de código aberto e está disponível sob a Licença MIT.

@@ -9,11 +9,11 @@ for /f "delims=" %%i in ('python -c "import playwright; import os; print(os.path
 echo Limpando builds anteriores...
 if exist build rd /s /q build
 if exist dist rd /s /q dist
-if exist F1SetupsAssist.spec del /q F1SetupsAssist.spec
+if exist OpenApexAI.spec del /q OpenApexAI.spec
 
-echo Compilando o F1 Setups Assist para Executavel (.exe)...
-python -m PyInstaller --clean --noconfirm --onefile --windowed --name "F1SetupsAssist" --add-data "data;data" --add-data "overlay;overlay" --add-data "scraper;scraper" --add-data "transformer;transformer" --add-data "%P_BROWSERS%;playwright\driver\package\.local-browsers" --icon=NONE main.py
+echo Compilando o OpenApex AI para Executavel (.exe)...
+python -m PyInstaller --clean --noconfirm --onefile --windowed --name "OpenApexAI" --add-data "data;data" --add-data "ui\overlay;ui\overlay" --add-data "scraper;scraper" --add-data "transformer;transformer" --add-data "%P_BROWSERS%;playwright\driver\package\.local-browsers" --icon=NONE main.py
 
 echo Build concluido!
-echo O executavel esta na pasta "dist/F1SetupsAssist.exe"
+echo O executavel esta na pasta "dist/OpenApexAI.exe"
 pause
