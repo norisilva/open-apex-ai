@@ -16,5 +16,6 @@
     "driving_mode": "DRIVING MODE",
     "btn_save_close": "SAVE AND CLOSE",
     "btn_cancel": "CANCEL",
-    "bot_running": "◈ BOT RUNNING"
+    "bot_running": "◈ BOT RUNNING",
+    "lang_label": "APP LANGUAGE (REQUIRES RESTART)"
 }

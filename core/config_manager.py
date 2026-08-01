@@ -24,7 +24,16 @@ class ConfigManager:
             self.rules_data = {}
 
     def get_language(self):
-        return self.rules_data.get("language", "pt_br")
+        if "language" in self.rules_data:
+            return self.rules_data["language"]
+        import locale
+        try:
+            lang, enc = locale.getdefaultlocale()
+            if lang and lang.lower().startswith('pt'):
+                return "pt_br"
+        except Exception:
+            pass
+        return "en"
 
     def get_mode(self):
         return self.rules_data.get("mode", "Acessibilidade (Max Estabilidade)")

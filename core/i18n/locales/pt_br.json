@@ -16,5 +16,6 @@
     "driving_mode": "MODO DE CONDUCAO",
     "btn_save_close": "SALVAR E FECHAR",
     "btn_cancel": "CANCELAR",
-    "bot_running": "◈ ROBO EM EXECUCAO"
+    "bot_running": "◈ ROBO EM EXECUCAO",
+    "lang_label": "IDIOMA DO APP (REQUER REINICIO)"
 }

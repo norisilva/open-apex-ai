@@ -59,6 +59,17 @@ class SettingsWindow(tk.Toplevel):
 
         self.config_mgr = ConfigManager()
         self.current_mode = self.config_mgr.get_mode()
+        self.current_lang = self.config_mgr.get_language()
+
+        tk.Label(content, text=_("lang_label"), bg=BG_PANEL, fg=MAGENTA, font=(FONT_MONO, 8, "bold")).pack(anchor="w", pady=(0, 4))
+        self.lang_var = tk.StringVar(value=self.current_lang)
+        
+        lang_frame = tk.Frame(content, bg=MAGENTA, padx=1, pady=1)
+        lang_frame.pack(fill=tk.X, pady=(0, 14))
+        self.lang_combo = tk.OptionMenu(lang_frame, self.lang_var, "en", "pt_br")
+        self.lang_combo.config(bg=BG_CARD, fg=MAGENTA, font=(FONT_MONO, 9), activebackground=BG_CARD, activeforeground=MAGENTA, highlightthickness=0, bd=0, relief="flat", indicatoron=True)
+        self.lang_combo["menu"].config(bg=BG_CARD, fg=MAGENTA, font=(FONT_MONO, 9), activebackground=MAGENTA, activeforeground=BG_DEEP)
+        self.lang_combo.pack(fill=tk.X)
 
         tk.Label(content, text=_("driving_mode"), bg=BG_PANEL, fg=MAGENTA, font=(FONT_MONO, 8, "bold")).pack(anchor="w", pady=(0, 4))
         self.mode_var = tk.StringVar(value=self.current_mode)
@@ -118,7 +129,7 @@ class SettingsWindow(tk.Toplevel):
 
     def save_and_apply(self):
         try:
-            self.config_mgr.save(self.mode_var.get(), self.susp_var.get(), self.diff_var.get(), self.brake_var.get())
+            self.config_mgr.save(self.mode_var.get(), self.susp_var.get(), self.diff_var.get(), self.brake_var.get(), self.lang_var.get())
             transformer = AccessibilityTransformer()
             transformer.run()
             CyberDialog(self.master, "SUCESSO", "Regras salvas e aplicadas!")
