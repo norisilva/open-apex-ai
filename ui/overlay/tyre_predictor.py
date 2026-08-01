@@ -2,6 +2,7 @@ class TyrePredictor:
     def __init__(self):
         self.wear_history = {} # lap_num -> (rl, rr, fl, fr)
         self.current_wear = (0.0, 0.0, 0.0, 0.0)
+        self.has_wear_sample = False
         self.wear_per_lap = (0.0, 0.0, 0.0, 0.0)
         self.current_lap = -1
         self.total_laps = -1
@@ -9,6 +10,9 @@ class TyrePredictor:
         
     def update_wear(self, wear_data):
         self.current_wear = wear_data
+        self.has_wear_sample = True
+        if self.current_lap != -1 and self.current_lap not in self.wear_history:
+            self.wear_history[self.current_lap] = self.current_wear
         
     def update_lap(self, lap_num, total_laps):
         self.total_laps = total_laps
@@ -35,7 +39,8 @@ class TyrePredictor:
                         )
         
         self.current_lap = lap_num
-        self.wear_history[lap_num] = self.current_wear
+        if self.has_wear_sample:
+            self.wear_history[lap_num] = self.current_wear
         
     def get_predictions(self):
         """Returns predictions based on the worst performing tyre."""
