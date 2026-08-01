@@ -98,8 +98,11 @@ class TelemetryListener(threading.Thread):
         if is_damage:
             if header.m_packetFormat >= 2025 and not getattr(self, '_dumped_10', False):
                 self._dumped_10 = True
-                with open("udp_dump_10.bin", "wb") as f:
-                    f.write(data)
+                try:
+                    with open("udp_dump_10.bin", "wb") as f:
+                        f.write(data)
+                except:
+                    pass
                     
             dam = TelemetryParser.parse_car_damage(data, header)
             if dam and self.wear_callback:

@@ -47,5 +47,17 @@ class TestTyrePredictor(unittest.TestCase):
         # in_5_laps = 6.5 + 1.5 * 5 = 14.0
         self.assertEqual(p["in_5_laps"], 14.0)
 
+    def test_lap_before_first_wear_does_not_inflate_rate(self):
+        self.predictor.update_lap(1, 50)
+        self.predictor.update_wear((5.0, 5.0, 5.0, 5.0))
+        self.predictor.update_lap(2, 50)
+        self.predictor.update_wear((6.0, 6.0, 6.0, 6.0))
+        self.predictor.update_lap(3, 50)
+
+        p = self.predictor.get_predictions()
+        self.assertIsNotNone(p)
+        self.assertFalse(p.get("is_calibrating"))
+        self.assertEqual(p["worst_rate"], 1.0)
+
 if __name__ == '__main__':
     unittest.main()
