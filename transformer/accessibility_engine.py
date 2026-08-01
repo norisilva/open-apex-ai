@@ -5,11 +5,19 @@ import sys
 # Add parent directory to path to import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-from transformer.rules import RULES
 
 class AccessibilityTransformer:
     def __init__(self):
-        self.rules = RULES
+        self.rules = self.load_rules()
+        
+    def load_rules(self):
+        if os.path.exists(config.RULES_FILE):
+            try:
+                with open(config.RULES_FILE, 'r') as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"Erro ao ler {config.RULES_FILE}: {e}")
+        return {}
         
     def apply_rule(self, value, rule_config):
         """Aplica uma unica regra a um valor especifico."""
