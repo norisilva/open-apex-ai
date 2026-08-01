@@ -8,7 +8,13 @@ class I18n:
     @classmethod
     def load_locale(cls, locale):
         cls._locale = locale
-        path = os.path.join(os.path.dirname(__file__), 'locales', f"{locale}.json")
+        import sys
+        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+            base_dir = os.path.join(sys._MEIPASS, 'core', 'i18n')
+        else:
+            base_dir = os.path.dirname(__file__)
+            
+        path = os.path.join(base_dir, 'locales', f"{locale}.json")
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 cls._strings = json.load(f)
