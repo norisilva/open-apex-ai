@@ -12,8 +12,7 @@ if exist dist rd /s /q dist
 if exist OpenApexAI.spec del /q OpenApexAI.spec
 
 echo Compilando o OpenApex AI para Executavel (.exe)...
-python -m PyInstaller --clean --noconfirm --onefile --windowed --name "OpenApexAI" --add-data "data;data" --add-data "ui\overlay;ui\overlay" --add-data "scraper;scraper" --add-data "transformer;transformer" --add-data "%P_BROWSERS%;playwright\driver\package\.local-browsers" --icon=NONE main.py
+python -m PyInstaller --clean --noconfirm --onefile --windowed --name "OpenApexAI" --add-data "data;data" --add-data "ui\overlay;ui\overlay" --add-data "core\scraper;core\scraper" --add-data "core\transformer;core\transformer" --add-data "%P_BROWSERS%;playwright\driver\package\.local-browsers" --icon=NONE main.py
 
 echo Build concluido!
 echo O executavel esta na pasta "dist/OpenApexAI.exe"
-pause
