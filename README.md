@@ -1,50 +1,52 @@
-# F1 Setups Assist - Assistente Universal de Setups
+# F1 Setups Assist - Universal Setup Assistant
 
-Aplicativo local para **F1 25** projetado como um Assistente Universal de Setups. O sistema extrai automaticamente os melhores setups competitivos online e permite que o jogador aplique **Perfis de Conducao** (Esports, Gamepad ou Acessibilidade para Distonia Focal). Ele também exibe um HUD flutuante no jogo que le sua telemetria para saber em qual pista você está.
+*[Ler em Português / Read in Portuguese (README_pt-BR.md)](README_pt-BR.md)*
 
-## 📦 Como Usar (Para Jogadores)
+A local desktop application for **F1 25** designed as a Universal Setup Assistant. The system automatically extracts the best competitive setups online and allows the player to apply **Driving Profiles** (Esports, Gamepad, or Accessibility for Focal Dystonia). It also features a floating in-game HUD that reads your live telemetry to know exactly which track you are currently racing on.
 
-**A maneira mais fácil de usar o F1 Setups Assist é baixando o Executável:**
+## 📦 How to Use (For Players)
 
-1. Vá na aba **[Releases](https://github.com/norisilva/f1-setups-assist/releases)** deste repositório.
-2. Baixe o arquivo `F1SetupsAssist.zip`.
-3. Extraia na sua área de trabalho e dê um duplo clique no `F1SetupsAssist.exe`.
-4. Uma Janela de Controle aparecerá!
+**The easiest way to use the F1 Setups Assist is by downloading the Executable:**
 
-### Usando o Painel de Controle
-- **Baixar Setups:** Clique no primeiro botão para que o sistema baixe os setups mais recentes da nuvem (Usa F1Laps, com fallback para SimRacingSetup caso seja bloqueado pelo Cloudflare).
-- **Configurar Perfil de Condução:** Clique na Engrenagem para escolher o seu modo. Você pode usar os setups "Esports" crus, suavizá-los para quem joga no "Gamepad", ou usar o modo máximo de "Acessibilidade" se você tiver dificuldades motoras (como Distonia Focal).
-- **HUD no Jogo:** Clique em Iniciar HUD. Uma telinha transparente vai aparecer sobre o seu jogo!
+1. Go to the **[Releases](https://github.com/norisilva/f1-setups-assist/releases)** tab of this repository.
+2. Download the `F1SetupsAssist.zip` file.
+3. Extract it to your desktop and double-click `F1SetupsAssist.exe`.
+4. A beautiful Cyberpunk Control Panel will appear!
 
-## 🏎️ Configuracao no F1 25
+### Using the Control Panel
+- **Download Setups (Baixar Setups):** Click the first button to let the system download the latest setups from the cloud (Uses F1Laps, with a fallback to SimRacingSetup in case of Cloudflare blocks).
+- **Configure Profile (Configurar Perfil):** Click the Gear icon to choose your driving mode. You can use raw "Esports" setups, smooth them out for "Gamepad" players, or use the maximum "Accessibility" mode if you have motor difficulties (like Focal Dystonia).
+- **In-Game HUD (Iniciar HUD):** Click to start the overlay. A transparent window will appear over your game!
 
-Para que o Overlay identifique em qual pista você está correndo, a telemetria do jogo precisa estar ativa:
-1. Abra o F1 25
-2. Vá em **Settings** > **Telemetry Settings**
+## 🏎️ F1 25 Configuration
+
+In order for the Overlay to identify which track you are racing on, the game's telemetry must be active:
+1. Open F1 25
+2. Go to **Settings** > **Telemetry Settings**
 3. **UDP Telemetry**: On
 4. **UDP Port**: `20777`
-5. **UDP Send Rate**: 10Hz a 20Hz é suficiente (para não sobrecarregar a rede)
+5. **UDP Send Rate**: 10Hz to 20Hz is enough (to avoid network overload)
 6. **UDP Format**: `2025`
 
 > [!CAUTION]
-> **Cuidado com outros softwares de telemetria!**
-> Se você possui o aplicativo oficial do F1Laps instalado no seu computador, **ele precisa estar fechado** antes de abrir o nosso HUD. O aplicativo F1Laps original monopoliza a porta 20777 do Windows, impedindo que os dados cheguem até o nosso Assistente.
+> **Beware of other telemetry software!**
+> If you have the official F1Laps app installed on your computer, **it must be closed** before opening our HUD. The original F1Laps app monopolizes Windows port 20777, preventing the data from reaching our Assistant.
 
-## 💻 Para Desenvolvedores (Como compilar)
+## 💻 For Developers (How to build)
 
-Se você quer modificar o código e rodar a partir do Python:
+If you want to modify the code and run it from Python:
 
-1. Clone o repositório
-2. Instale as dependências: 
+1. Clone the repository
+2. Install dependencies: 
 ```bash
 pip install -r requirements.txt
 playwright install chromium
 ```
-3. Execute `python main.py` para abrir o painel.
-4. Para compilar você mesmo o arquivo executável final, dê um duplo clique no `build.bat`! (O script usará o PyInstaller para empacotar a aplicação).
+3. Run `python main.py` to open the panel.
+4. To compile the final executable yourself, simply double-click `build.bat`! (The script will use PyInstaller to package the application with embedded chromium browsers).
 
-## Estrutura do Projeto
-* `scraper/`: Scripts do Playwright responsáveis por navegar, driblar anti-bots e extrair setups.
-* `transformer/`: O "cérebro" das regras de acessibilidade e suavização matemática.
-* `overlay/`: Servidor UDP e Janela Always-on-top em Tkinter.
-* `data/`: Onde os arquivos JSON resultantes e as suas regras pessoais (`rules.json`) ficam salvos.
+## Project Structure
+* `scraper/`: Playwright scripts responsible for navigating, bypassing anti-bots, and extracting setups.
+* `transformer/`: The "brain" of the accessibility rules and mathematical smoothing.
+* `overlay/`: UDP server and Always-on-top Tkinter window.
+* `data/`: Where the resulting JSON files and your personal rules (`rules.json`) are saved.
