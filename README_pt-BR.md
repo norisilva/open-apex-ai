@@ -9,8 +9,8 @@ Aplicativo local para **F1 25** projetado como um Assistente Universal de Setups
 **A maneira mais fácil de usar o F1 Setups Assist é baixando o Executável:**
 
 1. Vá na aba **[Releases](https://github.com/norisilva/f1-setups-assist/releases)** deste repositório.
-2. Baixe o arquivo `F1SetupsAssist.zip`.
-3. Extraia na sua área de trabalho e dê um duplo clique no `F1SetupsAssist.exe`.
+2. Baixe o arquivo `F1SetupsAssist.exe`.
+3. Coloque em sua área de trabalho e dê um duplo clique nele.
 4. Uma Janela de Controle aparecerá!
 
 ### Usando o Painel de Controle

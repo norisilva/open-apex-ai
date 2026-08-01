@@ -9,8 +9,8 @@ A local desktop application for **F1 25** designed as a Universal Setup Assistan
 **The easiest way to use the F1 Setups Assist is by downloading the Executable:**
 
 1. Go to the **[Releases](https://github.com/norisilva/f1-setups-assist/releases)** tab of this repository.
-2. Download the `F1SetupsAssist.zip` file.
-3. Extract it to your desktop and double-click `F1SetupsAssist.exe`.
+2. Download the `F1SetupsAssist.exe` file.
+3. Place it anywhere on your desktop and double-click it.
 4. A beautiful Cyberpunk Control Panel will appear!
 
 ### Using the Control Panel
