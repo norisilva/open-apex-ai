@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenApex AI - Open-Source AI Race Engineer</title>
     <meta name="description" content="OpenApex AI is a modern, open-source AI Race Engineer and Telemetry Hub for F1 Simulations. Experience predictive tyre wear and dynamic overlays.">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,64 +20,60 @@
         </div>
         <div class="nav-links">
             <a href="#features">Features</a>
-            <a href="#about">About</a>
-            <a href="https://github.com/norisilva/open-apex-ai" target="_blank" class="btn btn-outline">GitHub</a>
+            <a href="#media">Media</a>
+            <a href="https://github.com/norisilva/open-apex-ai" target="_blank">GitHub</a>
+            <a href="index_pt-BR.html" class="lang-toggle">🇧🇷 PT-BR</a>
         </div>
     </nav>
 
     <header class="hero">
         <div class="hero-content">
-            <h1 class="glitch-text" data-text="Your AI Race Engineer.">Your AI Race Engineer.</h1>
+            <h1 class="hero-title">Your AI Race Engineer.</h1>
             <p class="subtitle">Open-Source Telemetry Hub for F1 24 and F1 25</p>
             <p class="description">Elevate your simulation gameplay with intelligent tyre wear predictions, live setup overlays, and zero focus stealing mechanics.</p>
             <div class="hero-actions">
-                <a href="https://github.com/norisilva/open-apex-ai/releases/latest" class="btn btn-primary">Download Latest .exe</a>
-                <a href="https://github.com/norisilva/open-apex-ai#readme" class="btn btn-secondary">View Documentation</a>
+                <a href="https://github.com/norisilva/open-apex-ai/releases" class="btn btn-primary pulse-glow">Download Latest Release</a>
+                <a href="https://github.com/norisilva/open-apex-ai#readme" class="btn btn-secondary">Documentation</a>
             </div>
         </div>
         <div class="hero-visual">
-            <div class="glass-panel code-preview">
-                <div class="window-controls">
-                    <span></span><span></span><span></span>
-                </div>
-                <pre><code>[Telemetry]
-Connected: UDP Port 2077
-Game Detected: F1 25
-
-[AI Model]
-Loading Tyre Predictor... OK
-Analyzing wear data...
-Optimal Pit Window: Laps 14-16
-Compound: Hard (C2)
-</code></pre>
+            <div class="glass-panel image-container">
+                <img src="https://raw.githubusercontent.com/norisilva/open-apex-ai/main/screenshot/showcase_main_menu.png" alt="OpenApex AI Main Menu Showcase" class="hero-image">
             </div>
         </div>
     </header>
+
+    <section id="media" class="media-section">
+        <h2 class="section-title">See it in <span class="highlight-magenta">Action</span></h2>
+        <div class="video-container glass">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/8BYc6TkyOH8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </section>
 
     <section id="features" class="features">
         <h2 class="section-title">Next-Gen <span class="highlight-cyan">Telemetry Features</span></h2>
         
         <div class="grid">
             <div class="feature-card glass">
-                <div class="feature-icon magenta-glow">🧠</div>
+                <div class="feature-icon">🧠</div>
                 <h3>Smart Tyre Predictor</h3>
                 <p>Real-time degradation tracking using mathematical wear predictions to estimate optimal pit stop windows based on your driving style.</p>
             </div>
             
             <div class="feature-card glass">
-                <div class="feature-icon cyan-glow">🏎️</div>
+                <div class="feature-icon">🏎️</div>
                 <h3>Live Setup Overlay</h3>
                 <p>Automatically detects the current track and displays your predefined setup directly on your screen as a transparent HUD.</p>
             </div>
             
             <div class="feature-card glass">
-                <div class="feature-icon magenta-glow">🛡️</div>
+                <div class="feature-icon">🛡️</div>
                 <h3>Zero Focus Stealing</h3>
                 <p>Advanced OS-level geometry manipulation ensures that overlays appear without ever minimizing or stealing focus from your game.</p>
             </div>
             
             <div class="feature-card glass">
-                <div class="feature-icon cyan-glow">⚙️</div>
+                <div class="feature-icon">⚙️</div>
                 <h3>Accessibility Transformer</h3>
                 <p>Tweaks the game's hardware XML configuration files dynamically to provide maximum stability for controller and gamepad players.</p>
             </div>
@@ -88,7 +84,7 @@ Compound: Hard (C2)
         <div class="os-content">
             <h2>Built by the Community, for the Community</h2>
             <p>OpenApex AI is fully open-source. We believe that simulation telemetry tools should be accessible, transparent, and extensible. Whether you want to add support for new racing games or train new AI modules, your contributions are welcome!</p>
-            <a href="https://github.com/norisilva/open-apex-ai" class="btn btn-primary mt-4">Fork on GitHub</a>
+            <a href="https://github.com/norisilva/open-apex-ai" class="btn btn-secondary mt-4">Fork on GitHub</a>
         </div>
     </section>
 
