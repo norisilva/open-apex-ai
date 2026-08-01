@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 from ui.theme import *
 from ui.widgets import neon_button
+from core.i18n.translator import _
 
 class ConsoleRedirector:
     def __init__(self, text_widget):
@@ -19,7 +20,7 @@ class ConsoleFrame(tk.Frame):
         
         header = tk.Frame(self, bg=BG_PANEL)
         header.pack(fill=tk.X, pady=(0, 8))
-        tk.Label(header, text="◈ ROBO EM EXECUCAO", bg=BG_PANEL, fg=CYAN, font=(FONT_MONO, 11, "bold")).pack(side=tk.LEFT)
+        tk.Label(header, text=_("bot_running"), bg=BG_PANEL, fg=CYAN, font=(FONT_MONO, 11, "bold")).pack(side=tk.LEFT)
         self.blink_label = tk.Label(header, text="●", bg=BG_PANEL, fg=NEON_GREEN, font=(FONT_MONO, 12))
         self.blink_label.pack(side=tk.LEFT, padx=8)
         self._blink_on = True
@@ -36,7 +37,7 @@ class ConsoleFrame(tk.Frame):
         self.text.pack(fill=tk.BOTH, expand=True)
         self.text.configure(state='disabled')
 
-        self.btn_back_outer, self.btn_back_inner = neon_button(self, "← VOLTAR AO MENU", on_back, color=MAGENTA)
+        self.btn_back_outer, self.btn_back_inner = neon_button(self, f"← {_('btn_back_menu')}", on_back, color=MAGENTA)
         self.btn_back_outer.pack(fill=tk.X, pady=(8, 0))
 
     def set_back_enabled(self, enabled):

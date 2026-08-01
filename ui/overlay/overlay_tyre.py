@@ -2,9 +2,10 @@ import os, sys, tkinter as tk, keyboard
 from tkinter import ttk
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
-from telemetry.listener import TelemetryListener
-from overlay.tyre_predictor import TyrePredictor
-from overlay.theme import setup_overlay_style, setup_window_properties
+from core.telemetry.listener import TelemetryListener
+from ui.overlay.tyre_predictor import TyrePredictor
+from ui.overlay.theme import setup_overlay_style, setup_window_properties
+from core.i18n.translator import _
 
 class TyreOverlayApp:
     def __init__(self, parent=None, managed=False):
@@ -12,12 +13,16 @@ class TyreOverlayApp:
         else: self.root, self.owns_root = tk.Toplevel(parent), False
             
         self.managed = managed
-        setup_window_properties(self.root, "F1 Setups Assist - Pneus", "320x280+50+700")
+        self.base_geometry = "320x280+50+700"
+        setup_window_properties(self.root, _("title_tyre_overlay"), self.base_geometry)
         self.style = setup_overlay_style()
-        self.is_visible = True
+        self.is_visible = False
+        self.root.geometry("+-10000+-10000")
         
         if not self.managed:
-            try: keyboard.on_press_key("f8", self.toggle_visibility)
+            from core.config_manager import ConfigManager
+            hotkey = ConfigManager().get_tyre_hotkey()
+            try: keyboard.on_press_key(hotkey, self.toggle_visibility)
             except: pass
             
         self.predictor = TyrePredictor()
@@ -27,8 +32,8 @@ class TyreOverlayApp:
             config.UDP_PORT, None, lap_callback=self.on_lap_changed, wear_callback=self.on_wear_changed)
         
     def toggle_visibility(self, e=None):
-        if self.is_visible: self.root.withdraw()
-        else: self.root.deiconify(); self.root.attributes("-topmost", True)
+        if self.is_visible: self.root.geometry("+-10000+-10000")
+        else: self.root.geometry(self.base_geometry)
         self.is_visible = not self.is_visible
             
     def build_ui(self):
@@ -36,18 +41,18 @@ class TyreOverlayApp:
         main.pack(fill=tk.BOTH, expand=True)
         hdr = ttk.Frame(main)
         hdr.pack(fill=tk.X, pady=(0, 10))
-        ttk.Label(hdr, text="ANALISE DE PNEUS [F8 ocultar]", style="Header.TLabel").pack(anchor=tk.W)
-        self.status_lbl = ttk.Label(hdr, text="Aguardando volta completa...", foreground="gray")
+        ttk.Label(hdr, text=_("hdr_tyre_analysis"), style="Header.TLabel").pack(anchor=tk.W)
+        self.status_lbl = ttk.Label(hdr, text=_("status_waiting_lap"), foreground="gray")
         self.status_lbl.pack(anchor=tk.W)
         
         self.data_frame = ttk.Frame(main)
         self.data_frame.pack(fill=tk.BOTH, expand=True)
-        self.lbl_current = self.add_row("Desgaste Atual (Pior Pneu):", "--")
-        self.lbl_next = self.add_row("Proxima Volta (+1):", "--")
-        self.lbl_in5 = self.add_row("Daqui a 5 Voltas:", "--")
-        self.lbl_end = self.add_row("Final da Corrida:", "--")
+        self.lbl_current = self.add_row(_("lbl_current_wear"), "--")
+        self.lbl_next = self.add_row(_("lbl_next_lap"), "--")
+        self.lbl_in5 = self.add_row(_("lbl_in_5_laps"), "--")
+        self.lbl_end = self.add_row(_("lbl_end_race"), "--")
         ttk.Frame(self.data_frame, height=2).pack(fill=tk.X, pady=10)
-        self.lbl_pit = self.add_row("Pit Stop Sugerido:", "--", True)
+        self.lbl_pit = self.add_row(_("lbl_suggested_pit"), "--", True)
         
     def add_row(self, label_text, value_text, is_crit=False):
         row = ttk.Frame(self.data_frame)
@@ -71,13 +76,20 @@ class TyreOverlayApp:
         p = self.predictor.get_predictions()
         if not p: return
         def _set():
-            if self.predictor.total_laps > 0:
-                self.status_lbl.configure(text=f"Volta {self.predictor.current_lap} / {self.predictor.total_laps} (Gasto: {p['worst_rate']:.1f}%/v)")
-            else: self.status_lbl.configure(text=f"Volta {self.predictor.current_lap} (Gasto: {p['worst_rate']:.1f}%/v)")
-            self.lbl_next.configure(text=f"{p['next_lap']:.1f}%")
-            self.lbl_in5.configure(text=f"{p['in_5_laps']:.1f}%")
-            self.lbl_end.configure(text=f"{p['end_race']:.1f}%")
-            self.lbl_pit.configure(text=f"{p['suggested_pit']}")
+            if p.get('is_calibrating'):
+                self.status_lbl.configure(text=_("status_calibrating"))
+                self.lbl_next.configure(text="--")
+                self.lbl_in5.configure(text="--")
+                self.lbl_end.configure(text="--")
+                self.lbl_pit.configure(text="--")
+            else:
+                if self.predictor.total_laps > 0:
+                    self.status_lbl.configure(text=_("status_lap_info", curr=self.predictor.current_lap, total=self.predictor.total_laps, rate=round(p['worst_rate'], 1)))
+                else: self.status_lbl.configure(text=_("status_lap_info_nototal", curr=self.predictor.current_lap, rate=round(p['worst_rate'], 1)))
+                self.lbl_next.configure(text=f"{p['next_lap']:.1f}%")
+                self.lbl_in5.configure(text=f"{p['in_5_laps']:.1f}%")
+                self.lbl_end.configure(text=f"{p['end_race']:.1f}%")
+                self.lbl_pit.configure(text=f"{p['suggested_pit']}")
         self.root.after(0, _set)
         
     def run(self):

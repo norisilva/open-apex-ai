@@ -10,8 +10,9 @@ from ui.dialogs import CyberDialog
 from ui.menu_frame import MenuFrame
 from ui.console_frame import ConsoleFrame, ConsoleRedirector
 from ui.settings_window import SettingsWindow
-from scraper.dual_scraper import DualScraper
-from transformer.accessibility_engine import AccessibilityTransformer
+from core.scraper.dual_scraper import DualScraper
+from core.transformer.accessibility_engine import AccessibilityTransformer
+from ui.window_manager import WindowManager
 
 class ControlPanel(tk.Tk):
     def __init__(self):
@@ -27,7 +28,7 @@ class ControlPanel(tk.Tk):
         inner = tk.Frame(outer, bg=BG_DEEP, padx=1, pady=1)
         inner.pack(fill=tk.BOTH, expand=True)
 
-        self.title_bar = CyberTitleBar(inner, title="F1 SETUPS ASSIST // v2.0", on_close=self.destroy, on_minimize=self.iconify)
+        self.title_bar = CyberTitleBar(inner, title="OPENAPEX AI // v2.0", on_close=self.destroy, on_minimize=self.iconify)
         self.title_bar.pack(fill=tk.X)
 
         self.main_panel = tk.Frame(inner, bg=BG_PANEL)
@@ -35,10 +36,17 @@ class ControlPanel(tk.Tk):
         self.container = tk.Frame(self.main_panel, bg=BG_PANEL)
         self.container.pack(fill=tk.BOTH, expand=True, padx=18, pady=18)
 
-        self.menu_frame = MenuFrame(self.container, self.run_scraper, self.open_settings, self.run_smart_hud)
+        self.menu_frame = MenuFrame(self.container, self.run_scraper, self.open_settings, self.run_smart_hud, self.run_auto_config)
         self.console_frame = ConsoleFrame(self.container, self.show_menu)
         
+        self.window_manager = WindowManager(self, hotkey='f4')
+            
         self.show_menu()
+
+    def destroy(self):
+        if hasattr(self, 'window_manager'):
+            self.window_manager.destroy()
+        super().destroy()
 
     def show_menu(self):
         self.console_frame.stop_blink()
@@ -86,7 +94,7 @@ class ControlPanel(tk.Tk):
 
     def run_smart_hud(self):
         try:
-            from overlay.overlay_manager import HUDManager
+            from ui.overlay.overlay_manager import HUDManager
             self.withdraw()
             app = HUDManager(parent=self)
             app.run()
@@ -94,3 +102,15 @@ class ControlPanel(tk.Tk):
             self.deiconify()
         except Exception as e:
             CyberDialog(self, "ERRO", f"Erro ao iniciar o HUD Inteligente:\n{e}", error=True)
+
+    def run_auto_config(self):
+        try:
+            from core.telemetry.game_config import GameConfigurator
+            configurator = GameConfigurator()
+            result = configurator.configure_all_games()
+            if result.get("success"):
+                CyberDialog(self, "SUCESSO", result.get("msg"), error=False)
+            else:
+                CyberDialog(self, "ERRO", result.get("msg"), error=True)
+        except Exception as e:
+            CyberDialog(self, "ERRO", f"Falha na auto-configuracao:\n{e}", error=True)

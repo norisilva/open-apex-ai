@@ -1,6 +1,6 @@
-import os
+﻿import os
 from config import SRS_BASE_URL, GAME_VERSION
-from scraper.track_catalog import TRACKS
+from core.scraper.track_catalog import TRACKS
 
 class SRSScraper:
     def __init__(self):

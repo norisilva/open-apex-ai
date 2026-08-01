@@ -10,3 +10,8 @@ build/
 dist/
 *.spec
 *.log
+.agents/
+
+# Documentos internos
+ROADMAP.md
+*.exe
