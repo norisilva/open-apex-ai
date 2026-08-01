@@ -4,3 +4,9 @@ __pycache__/
 data/
 venv/
 .venv/
+
+# Build artifacts
+build/
+dist/
+*.spec
+*.log
