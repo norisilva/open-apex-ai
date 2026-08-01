@@ -1,5 +1,6 @@
+import sys
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, scrolledtext
 import threading
 import json
 import os
@@ -7,6 +8,20 @@ import os
 import config
 from scraper.dual_scraper import DualScraper
 from transformer.accessibility_engine import AccessibilityTransformer
+
+class ConsoleRedirector:
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+        self.text_widget.configure(state='normal')
+
+    def write(self, string):
+        self.text_widget.configure(state='normal')
+        self.text_widget.insert(tk.END, string)
+        self.text_widget.see(tk.END)
+        self.text_widget.configure(state='disabled')
+        
+    def flush(self):
+        pass
 
 class ControlPanel(tk.Tk):
     def __init__(self):
@@ -20,63 +35,92 @@ class ControlPanel(tk.Tk):
         self.style = ttk.Style(self)
         self.style.theme_use('clam')
         
+        self.style.configure("TFrame", background="#0f172a")
         self.style.configure("TLabel", background="#0f172a", foreground="white", font=("Segoe UI", 10))
-        self.style.configure("Title.TLabel", font=("Segoe UI", 16, "bold"), foreground="#a855f7")
-        self.style.configure("TButton", font=("Segoe UI", 10, "bold"), padding=10, background="#3b82f6", foreground="white")
+        self.style.configure("Title.TLabel", font=("Segoe UI", 16, "bold"), foreground="#a855f7", background="#0f172a")
+        self.style.configure("TButton", font=("Segoe UI", 10, "bold"), padding=10, background="#3b82f6", foreground="white", borderwidth=0)
         self.style.map("TButton", background=[('active', '#2563eb')])
         
         self.style.configure("Secondary.TButton", background="#1e293b", foreground="white")
         self.style.map("Secondary.TButton", background=[('active', '#334155')])
 
-        # Main Frame
-        main_frame = ttk.Frame(self, style="TFrame")
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # Main Container
+        self.container = tk.Frame(self, bg="#0f172a")
+        self.container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # Header
-        ttk.Label(main_frame, text="F1 Setups Assist", style="Title.TLabel").pack(pady=(0, 20))
+        # --- Tela 1: Menu ---
+        self.menu_frame = ttk.Frame(self.container, style="TFrame")
         
-        # Status Label
+        ttk.Label(self.menu_frame, text="F1 Setups Assist", style="Title.TLabel").pack(pady=(0, 20))
+        
         self.status_var = tk.StringVar(value="Status: Pronto")
-        self.status_label = ttk.Label(main_frame, textvariable=self.status_var, foreground="#22c55e")
+        self.status_label = ttk.Label(self.menu_frame, textvariable=self.status_var, foreground="#22c55e")
         self.status_label.pack(pady=(0, 20))
         
-        # Buttons
-        self.btn_scrape = ttk.Button(main_frame, text="🔄 Baixar Setups da Nuvem", command=self.run_scraper)
+        self.btn_scrape = ttk.Button(self.menu_frame, text="🔄 Baixar Setups da Nuvem", command=self.run_scraper)
         self.btn_scrape.pack(fill=tk.X, pady=5)
         
-        self.btn_settings = ttk.Button(main_frame, text="⚙️ Configurar Acessibilidade", command=self.open_settings)
+        self.btn_settings = ttk.Button(self.menu_frame, text="⚙️ Configurar Perfis", command=self.open_settings)
         self.btn_settings.pack(fill=tk.X, pady=5)
         
-        self.btn_overlay = ttk.Button(main_frame, text="🚀 Iniciar HUD no Jogo", command=self.run_overlay)
+        self.btn_overlay = ttk.Button(self.menu_frame, text="🚀 Iniciar HUD no Jogo", command=self.run_overlay)
         self.btn_overlay.pack(fill=tk.X, pady=5)
         
-        # Footer
-        footer_frame = tk.Frame(main_frame, bg="#0f172a")
+        footer_frame = tk.Frame(self.menu_frame, bg="#0f172a")
         footer_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=(20, 0))
         ttk.Label(footer_frame, text="Ao rodar o HUD, feche o F1Laps App.", foreground="#94a3b8", font=("Segoe UI", 8)).pack(side=tk.LEFT)
         
+        # --- Tela 2: Console ---
+        self.console_frame = ttk.Frame(self.container, style="TFrame")
+        ttk.Label(self.console_frame, text="Progresso do Robo", style="Title.TLabel").pack(pady=(0, 10))
+        
+        self.console_text = scrolledtext.ScrolledText(self.console_frame, wrap=tk.WORD, bg="#020617", fg="#10b981", font=("Consolas", 9), height=15, borderwidth=0)
+        self.console_text.pack(fill=tk.BOTH, expand=True, pady=5)
+        self.console_text.configure(state='disabled')
+        
+        self.btn_back = ttk.Button(self.console_frame, text="Voltar ao Menu", style="Secondary.TButton", command=self.show_menu)
+        self.btn_back.pack(fill=tk.X, pady=5)
+        
+        self.show_menu()
+        
+    def show_menu(self):
+        self.console_frame.pack_forget()
+        self.menu_frame.pack(fill=tk.BOTH, expand=True)
+        
+    def show_console(self):
+        self.menu_frame.pack_forget()
+        self.console_frame.pack(fill=tk.BOTH, expand=True)
+
     def run_scraper(self):
-        self.btn_scrape.config(state="disabled")
-        self.status_var.set("Status: Baixando setups (isso pode demorar uns minutos)...")
-        self.status_label.config(foreground="#eab308")
+        self.show_console()
+        self.console_text.configure(state='normal')
+        self.console_text.delete(1.0, tk.END)
+        self.console_text.configure(state='disabled')
+        self.btn_back.config(state="disabled")
         
         def scrape_thread():
+            old_stdout = sys.stdout
+            sys.stdout = ConsoleRedirector(self.console_text)
+            
             try:
+                print("Iniciando extracao de setups da nuvem...\n")
                 scraper = DualScraper()
                 scraper.run()
                 
+                print("\nAplicando perfis matematicos e salvando...")
                 transformer = AccessibilityTransformer()
                 transformer.run()
                 
-                self.status_var.set("Status: Setups baixados e suavizados com sucesso!")
+                print("\nConcluido com sucesso! Voce ja pode voltar ao menu.")
+                self.status_var.set("Status: Setups atualizados com sucesso!")
                 self.status_label.config(foreground="#22c55e")
-                messagebox.showinfo("Sucesso", "Setups foram extraidos e as regras aplicadas com sucesso!")
             except Exception as e:
+                print(f"\nERRO NA EXTRACAO: {e}")
                 self.status_var.set(f"Status: Erro na extracao.")
                 self.status_label.config(foreground="#ef4444")
-                messagebox.showerror("Erro", f"Ocorreu um erro:\n{e}")
             finally:
-                self.btn_scrape.config(state="normal")
+                sys.stdout = old_stdout
+                self.btn_back.config(state="normal")
                 
         threading.Thread(target=scrape_thread, daemon=True).start()
 
