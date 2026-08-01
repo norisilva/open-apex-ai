@@ -12,8 +12,7 @@ from ui.console_frame import ConsoleFrame, ConsoleRedirector
 from ui.settings_window import SettingsWindow
 from scraper.dual_scraper import DualScraper
 from transformer.accessibility_engine import AccessibilityTransformer
-import keyboard
-from ui.edge_trigger import EdgeTrigger
+from ui.window_manager import WindowManager
 
 class ControlPanel(tk.Tk):
     def __init__(self):
@@ -40,58 +39,13 @@ class ControlPanel(tk.Tk):
         self.menu_frame = MenuFrame(self.container, self.run_scraper, self.open_settings, self.run_smart_hud, self.run_auto_config)
         self.console_frame = ConsoleFrame(self.container, self.show_menu)
         
-        self.edge_trigger = None
-        self.is_hidden = False
-        self.bind("<FocusOut>", self._on_focus_out)
-        
-        try:
-            keyboard.add_hotkey('f4', lambda: self.after(0, self.toggle_visibility))
-        except Exception as e:
-            print(f"Aviso: Erro ao registrar hotkey: {e}")
+        self.window_manager = WindowManager(self, hotkey='f4')
             
         self.show_menu()
 
-    def _on_focus_out(self, event):
-        if getattr(self, 'ignore_focus_out', False):
-            return
-        if event.widget == self:
-            self.hide_to_edge()
-
-    def hide_to_edge(self):
-        if self.is_hidden: return
-        self.is_hidden = True
-        self.withdraw()
-        
-        if self.edge_trigger is None or not self.edge_trigger.winfo_exists():
-            self.edge_trigger = EdgeTrigger(lambda: self.after(0, lambda: self.restore_from_edge(True)))
-
-    def restore_from_edge(self, take_focus=True):
-        if not self.is_hidden: return
-        self.is_hidden = False
-        
-        # Evita que o app feche instantaneamente se o jogo roubar o foco logo em seguida
-        self.ignore_focus_out = True
-        self.after(500, lambda: setattr(self, 'ignore_focus_out', False))
-        
-        if self.edge_trigger and self.edge_trigger.winfo_exists():
-            self.edge_trigger.destroy()
-            self.edge_trigger = None
-            
-        self.deiconify()
-        if take_focus:
-            self.focus_force()
-
-    def toggle_visibility(self):
-        if self.is_hidden:
-            self.restore_from_edge(take_focus=False)
-        else:
-            self.hide_to_edge()
-
     def destroy(self):
-        try:
-            keyboard.unhook_all_hotkeys()
-        except:
-            pass
+        if hasattr(self, 'window_manager'):
+            self.window_manager.destroy()
         super().destroy()
 
     def show_menu(self):

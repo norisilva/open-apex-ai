@@ -3,7 +3,6 @@
 ## [1.1.0] - 2026-08-01
 ### Added
 - Novo modulo de previsao e overlay de desgaste de pneus (TyrePredictor e TyreOverlayApp).
-- Regra de projeto (.agents) para instruir a leitura da documentacao de telemetria do F1 25 ao modificar parsers.
 
 ### Fixed
 - Removido codigo morto e quebrado (`from_bytes`) dentro da funcao `process_packet` que chamava objeto inexistente.
