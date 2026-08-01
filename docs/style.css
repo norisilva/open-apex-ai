@@ -236,23 +236,50 @@ body {
 
 /* Hero Image Container */
 .image-container {
+    position: relative;
     width: 100%;
     border-radius: 12px;
-    overflow: hidden;
     padding: 10px;
-    transform: perspective(1000px) rotateY(-5deg);
-    transition: transform 0.5s ease;
+    transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.6),
+        0 0 20px rgba(0, 229, 255, 0.2),
+        inset 0 0 10px rgba(224, 0, 224, 0.1);
+}
+
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, var(--cyan), transparent, var(--magenta), transparent);
+    z-index: -1;
+    border-radius: 14px;
+    filter: blur(8px);
+    opacity: 0.5;
+    transition: opacity 0.5s ease;
 }
 
 .image-container:hover {
-    transform: perspective(1000px) rotateY(0deg);
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-5px);
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.7),
+        0 0 30px rgba(0, 229, 255, 0.4),
+        inset 0 0 15px rgba(224, 0, 224, 0.2);
+    border-color: rgba(0, 229, 255, 0.6);
+}
+
+.image-container:hover::before {
+    opacity: 0.8;
 }
 
 .hero-image {
     width: 100%;
     border-radius: 8px;
     display: block;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    filter: contrast(1.05) brightness(1.1);
 }
 
 /* Media Section (YouTube Video) */
