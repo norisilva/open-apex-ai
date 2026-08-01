@@ -3,7 +3,7 @@ from ui.theme import *
 from ui.widgets import neon_button
 
 class MenuFrame(tk.Frame):
-    def __init__(self, parent, on_scrape, on_config, on_hud):
+    def __init__(self, parent, on_scrape, on_config, on_hud, on_auto_config):
         super().__init__(parent, bg=BG_PANEL)
         
         header = tk.Frame(self, bg=BG_PANEL)
@@ -27,6 +27,9 @@ class MenuFrame(tk.Frame):
 
         btn_hud, _ = neon_button(self, "[ 03 ]  INICIAR CENTRAL HUD INTELIGENTE", on_hud, color=NEON_GREEN)
         btn_hud.pack(fill=tk.X, pady=4)
+
+        btn_auto_config, _ = neon_button(self, "[ 04 ]  AUTO-CONFIGURAR JOGO (TELEMETRIA)", on_auto_config, color=CYAN)
+        btn_auto_config.pack(fill=tk.X, pady=4)
 
         tk.Frame(self, bg=GRAY, height=1).pack(fill=tk.X, pady=(16, 8))
         tk.Label(self, text="! Ao rodar o HUD, feche o F1Laps App", bg=BG_PANEL, fg=GRAY, font=(FONT_MONO, 7)).pack(anchor="w")

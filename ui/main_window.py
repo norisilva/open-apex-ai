@@ -35,7 +35,7 @@ class ControlPanel(tk.Tk):
         self.container = tk.Frame(self.main_panel, bg=BG_PANEL)
         self.container.pack(fill=tk.BOTH, expand=True, padx=18, pady=18)
 
-        self.menu_frame = MenuFrame(self.container, self.run_scraper, self.open_settings, self.run_smart_hud)
+        self.menu_frame = MenuFrame(self.container, self.run_scraper, self.open_settings, self.run_smart_hud, self.run_auto_config)
         self.console_frame = ConsoleFrame(self.container, self.show_menu)
         
         self.show_menu()
@@ -94,3 +94,15 @@ class ControlPanel(tk.Tk):
             self.deiconify()
         except Exception as e:
             CyberDialog(self, "ERRO", f"Erro ao iniciar o HUD Inteligente:\n{e}", error=True)
+
+    def run_auto_config(self):
+        try:
+            from telemetry.game_config import GameConfigurator
+            configurator = GameConfigurator()
+            result = configurator.configure_all_games()
+            if result.get("success"):
+                CyberDialog(self, "SUCESSO", result.get("msg"), error=False)
+            else:
+                CyberDialog(self, "ERRO", result.get("msg"), error=True)
+        except Exception as e:
+            CyberDialog(self, "ERRO", f"Falha na auto-configuracao:\n{e}", error=True)
