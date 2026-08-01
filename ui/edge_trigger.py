@@ -26,6 +26,6 @@ class EdgeTrigger(tk.Toplevel):
         lbl.pack(expand=True)
         
         # Bind de cliques para restaurar janela
-        self.bind("<Button-1>", lambda e: on_click())
-        frame.bind("<Button-1>", lambda e: on_click())
-        lbl.bind("<Button-1>", lambda e: on_click())
+        self.bind("<ButtonRelease-1>", lambda e: on_click())
+        frame.bind("<ButtonRelease-1>", lambda e: on_click())
+        lbl.bind("<ButtonRelease-1>", lambda e: on_click())

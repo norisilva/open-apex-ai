@@ -56,6 +56,10 @@ class WindowManager:
         # Garante que vai aparecer em cima do F1 (fundamental)
         self.root.attributes("-topmost", True)
         self.root.focus_force()
+        
+        # Ignora eventos FocusOut espurios vindos do SO pela destruicao do edge trigger
+        self._ignore_focus = True
+        self.root.after(500, lambda: setattr(self, '_ignore_focus', False))
 
     def retract(self):
         """Oculta a janela principal e ativa o trigger flutuante."""
@@ -72,6 +76,9 @@ class WindowManager:
 
     def _on_focus_out(self, event):
         """Controla a perda de foco."""
+        if getattr(self, '_ignore_focus', False):
+            return
+            
         # Se a propria janela perder foco, checamos para recolher.
         if event.widget == self.root and self.state == WindowState.EXPANDED:
             # Debounce timer para evitar glitchs de perda de foco do OS
